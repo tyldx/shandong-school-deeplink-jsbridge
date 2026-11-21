@@ -1,0 +1,8 @@
+*.log
+.DS_Store
+
+__pycache__/
+*.pyc
+*.pdf
+server.crt
+server.key
