@@ -135,6 +135,7 @@ host.equals("huachenjie.com") || host.endsWith(".huachenjie.com")
 - 2026-11-18 向厂商邮箱 shandongxinxifuwu@163.com 报告
 - 2026-11-18 提交 CNVD(CNVD-C-2026-941784)
 - 2026-11-19 App 内客服:无安全入口,人工客服排队数百人
+- 2026-11-22 向 VulDB(CNA)申请 CVE
 
 ## 附录:方法清单
 

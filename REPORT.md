@@ -135,6 +135,7 @@ host.equals("huachenjie.com") || host.endsWith(".huachenjie.com")
 - 2026-11-18 Reported to the vendor at shandongxinxifuwu@163.com
 - 2026-11-18 Submitted to CNVD (CNVD-C-2026-941784)
 - 2026-11-19 In-app customer service: no security channel; hundreds queued for a human agent
+- 2026-11-22 Requested a CVE from VulDB (CNA)
 
 ## Appendix: method list
 
